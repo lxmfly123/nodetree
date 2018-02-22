@@ -16,11 +16,15 @@ class NewTreeNode extends React.Component {
     this.props.root.onFold(this);
   }
 
+  onDragStart = e => {
+    e.dataTransfer.setData('node', this);
+  }
+
   render () {
     const props = this.props;
     const hasChildren = !!(props.children && props.children.length)
     return (
-      <ul>
+
         <li className={['node',
           props.isSelected ? 'selected' : undefined,
           props.isChecked ?  'checked' : undefined,
@@ -28,14 +32,21 @@ class NewTreeNode extends React.Component {
         >
           <span className={['folder', hasChildren ? undefined : 'noChildren'  ].join(' ')} onClick={this.onFold}>{props.isFolded ? '▸' : '▾'}</span>
           <span className={'checkbox'} onClick={this.onCheck}>
-            <span className='checker'>x</span>
+            <span className='checker'>X</span>
           </span>
-          <span className={'title'} draggable={props.draggable} onClick={this.onSelect}>{props.title}</span>
-          {hasChildren && !props.isFolded ? React.Children.map(props.children, (node, index) => (
-            props.root.renderTreeNode(node, index, this.props.path)
-          )) : undefined}
+          <span 
+            className={'title'} 
+            draggable={props.draggable} 
+            onClick={this.onSelect} 
+            onDragStart={this.onDragStart}
+          >{props.title}</span>
+          {hasChildren && !props.isFolded ? 
+            <ul>
+              {React.Children.map(props.children, (node, index) => (
+                props.root.renderTreeNode(node, index, this.props.path)
+              ))}
+            </ul> : undefined}
         </li>
-      </ul> 
     );
   }
 }

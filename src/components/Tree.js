@@ -59,7 +59,10 @@ class Tree extends React.Component {
 
   render () {
     return (
-      <div>{React.Children.map(this.props.children, this.renderTreeNode)}</div>
+      // <div>{React.Children.map(this.props.children, this.renderTreeNode)}</div>
+      <ul>
+        {React.Children.map(this.props.children, this.renderTreeNode, this)}
+      </ul>
     )
   }
 }
